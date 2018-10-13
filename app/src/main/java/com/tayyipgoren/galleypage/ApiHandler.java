@@ -2,17 +2,18 @@ package com.tayyipgoren.galleypage;
 
 import android.os.AsyncTask;
 
-// For JSON
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-// For HTTP
+import java.util.ArrayList;
+
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-import java.util.ArrayList;
+// For JSON
+// For HTTP
 
 
 public class ApiHandler extends AsyncTask<String, Void, Void>
@@ -30,8 +31,9 @@ public class ApiHandler extends AsyncTask<String, Void, Void>
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
 
-        // Updating image_adapter adapter
+        // Notify image_adapter adapter
         MainActivity.imageAdapter.notifyDataSetChanged();
+
     }
 
     @Override

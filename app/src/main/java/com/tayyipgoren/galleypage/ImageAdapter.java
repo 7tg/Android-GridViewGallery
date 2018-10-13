@@ -1,13 +1,13 @@
 package com.tayyipgoren.galleypage;
 
 import android.content.Context;
-
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
-
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
@@ -37,26 +37,8 @@ public class ImageAdapter extends BaseAdapter {
         return 0;
     }
 
-    // create a new ImageView for each item referenced by the Adapter
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ImageView imageView;
-
-        if (convertView == null) {
-            imageView = new ImageView(mContext);
-
-            // Image View Paramaters
-            imageView.setLayoutParams(new GridView.LayoutParams(500, 500));
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setPadding(8, 8, 8, 8);
-
-            // Starting Download Async Task
-            new DownloadImageTask(imageView).execute(ApiHandler.data.get(position));
-        }
-        else
-        {
-            imageView = (ImageView) convertView;
-        }
-        return imageView;
+    public static int DPtoPixels(Resources r, float DP) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, DP, r.getDisplayMetrics());
     }
 
     public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
@@ -85,5 +67,24 @@ public class ImageAdapter extends BaseAdapter {
             Animation fadeInAnimation = AnimationUtils.loadAnimation(mContext, R.anim.fade_in);
             bmImage.startAnimation(fadeInAnimation);
         }
+    }
+
+    // create a new ImageView for each item referenced by the Adapter
+    public View getView(int position, View convertView, ViewGroup parent) {
+        ImageView imageView;
+
+        if (convertView == null) {
+            imageView = new ImageView(mContext);
+
+            // Image View Paramaters
+            imageView.setLayoutParams(new GridView.LayoutParams(DPtoPixels(mContext.getResources(), 120), DPtoPixels(mContext.getResources(), 120)));
+            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+            // Starting Download Async Task
+            new DownloadImageTask(imageView).execute(ApiHandler.data.get(position));
+        } else {
+            imageView = (ImageView) convertView;
+        }
+        return imageView;
     }
 }
